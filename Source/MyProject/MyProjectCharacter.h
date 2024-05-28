@@ -40,6 +40,7 @@ class AMyProjectCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+
 	
 public:
 	AMyProjectCharacter();
@@ -59,11 +60,22 @@ public:
 
 	/** Setter to set the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void SetHasRifle(bool bNewHasRifle);
+	void SetHasRifle(bool bNewHasRifle, UTP_WeaponComponent* weaponComponent);
 
 	/** Getter for the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
+
+	UPROPERTY()
+	class UTP_WeaponComponent* PickedWeapon;
+
+	UFUNCTION()
+	class UTP_WeaponComponent* GetPickedWeapon() { return PickedWeapon; };
+
+
+	/** Attaches the actor to a FirstPersonCharacter */
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void OnAmmoChange(int bulletCount);
 
 protected:
 	/** Called for movement input */

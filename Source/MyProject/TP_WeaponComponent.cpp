@@ -10,9 +10,27 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+
+void UTP_WeaponComponent::BeginPlay()
+{
+	if (Character == nullptr)
+	{
+		return;
+	}
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->RemoveMappingContext(FireMappingContext);
+		}
+	}
+}
+
 // Sets default values for this component's properties
 UTP_WeaponComponent::UTP_WeaponComponent()
 {
+	SetBulletCount(30);
 	// Default offset from the character location for projectiles to spawn
 	MuzzleOffset = FVector(100.0f, 0.0f, 10.0f);
 }
@@ -20,6 +38,11 @@ UTP_WeaponComponent::UTP_WeaponComponent()
 
 void UTP_WeaponComponent::Fire()
 {
+	if (GetBulletCount() == 0)
+	{
+		return;
+	}
+
 	if (Character == nullptr || Character->GetController() == nullptr)
 	{
 		return;
@@ -61,6 +84,8 @@ void UTP_WeaponComponent::Fire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+
+	SetBulletCount(GetBulletCount() - 1);
 }
 
 void UTP_WeaponComponent::AttachWeapon(AMyProjectCharacter* TargetCharacter)
@@ -78,7 +103,8 @@ void UTP_WeaponComponent::AttachWeapon(AMyProjectCharacter* TargetCharacter)
 	AttachToComponent(Character->GetMesh1P(), AttachmentRules, FName(TEXT("GripPoint")));
 	
 	// switch bHasRifle so the animation blueprint can switch to another animation set
-	Character->SetHasRifle(true);
+	Character->SetHasRifle(true, this);
+
 
 	// Set up action bindings
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))

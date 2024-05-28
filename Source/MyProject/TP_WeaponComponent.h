@@ -8,6 +8,10 @@
 
 class AMyProjectCharacter;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAmmoChange, int, AmmoCounter);
+
+
+
 UCLASS(Blueprintable, BlueprintType, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class MYPROJECT_API UTP_WeaponComponent : public USkeletalMeshComponent
 {
@@ -49,7 +53,34 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
 
+	/** Delegate to whom anyone can subscribe to receive this event */
+	UPROPERTY(BlueprintAssignable, Category = "Weapon")
+	FOnAmmoChange OnAmmoChange;
+
+
+	/** Bool for AnimBP to switch to another animation set */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
+	int uBulletCount;
+
+	/** Setter to set the bool */
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	void SetBulletCount(int bulletCount) { uBulletCount = bulletCount; }
+
+	/** Getter for the bool */
+	UFUNCTION(BlueprintCallable, Category = Weapon)
+	int GetBulletCount() { return uBulletCount; }
+
+	
+
+
+
 protected:
+	/** Ends gameplay for this component. */
+	UFUNCTION()
+	virtual void BeginPlay() override;
+
+	
+
 	/** Ends gameplay for this component. */
 	UFUNCTION()
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;

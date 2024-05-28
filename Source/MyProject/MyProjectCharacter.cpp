@@ -1,20 +1,28 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "MyProjectCharacter.h"
-#include "MyProjectProjectile.h"
+
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/LocalPlayer.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "Engine/LocalPlayer.h"
+#include "MyProjectProjectile.h"
+#include "Components/WidgetComponent.h"
+#include "BulletCounter.h"
+#include "TP_WeaponComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
 // AMyProjectCharacter
+
+void AMyProjectCharacter::OnAmmoChange(int AmmoCounter)
+{
+
+}
 
 AMyProjectCharacter::AMyProjectCharacter()
 {
@@ -26,9 +34,13 @@ AMyProjectCharacter::AMyProjectCharacter()
 		
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	
+	
+
 
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
@@ -40,6 +52,8 @@ AMyProjectCharacter::AMyProjectCharacter()
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
 }
+
+
 
 void AMyProjectCharacter::BeginPlay()
 {
@@ -107,9 +121,11 @@ void AMyProjectCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMyProjectCharacter::SetHasRifle(bool bNewHasRifle)
+void AMyProjectCharacter::SetHasRifle(bool bNewHasRifle, UTP_WeaponComponent* weaponComponent)
 {
 	bHasRifle = bNewHasRifle;
+	PickedWeapon = weaponComponent;
+	PickedWeapon->OnAmmoChange.AddUniqueDynamic(this, &AMyProjectCharacter::OnAmmoChange);
 }
 
 bool AMyProjectCharacter::GetHasRifle()
