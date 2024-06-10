@@ -7,9 +7,11 @@
 #include "Components/TextBlock.h"
 
 
-void UBulletCounter::Update()
+
+
+void UBulletCounter::Update(int currentBulletCount, int maxBulletCount)
 {
-	BulletCounterBar->SetPercent(100);
-	CurrentBulletCount->SetText(FText::AsNumber(3));
-	MaxBulletCount->SetText(FText::AsNumber(30));
+	BulletCounterBar->SetPercent(currentBulletCount/ float(maxBulletCount));
+	CurrentBulletCount->SetText(FText::AsNumber(currentBulletCount));
+	MaxBulletCount->SetText(FText::AsNumber(maxBulletCount));
 }

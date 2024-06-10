@@ -15,7 +15,9 @@ class MYPROJECT_API UBulletCounter : public UUserWidget
 	GENERATED_BODY()
 public:
 
-	void Update();
+
+	UFUNCTION()
+	void Update(int bulletCount, int maxBulletCount);
 
 protected:
 	UPROPERTY( meta = (BindWidget))

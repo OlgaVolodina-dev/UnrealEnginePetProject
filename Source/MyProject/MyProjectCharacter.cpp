@@ -13,16 +13,14 @@
 #include "Components/WidgetComponent.h"
 #include "BulletCounter.h"
 #include "TP_WeaponComponent.h"
+#include "MyProjectGameMode.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
 // AMyProjectCharacter
 
-void AMyProjectCharacter::OnAmmoChange(int AmmoCounter)
-{
 
-}
 
 AMyProjectCharacter::AMyProjectCharacter()
 {
@@ -125,7 +123,9 @@ void AMyProjectCharacter::SetHasRifle(bool bNewHasRifle, UTP_WeaponComponent* we
 {
 	bHasRifle = bNewHasRifle;
 	PickedWeapon = weaponComponent;
-	PickedWeapon->OnAmmoChange.AddUniqueDynamic(this, &AMyProjectCharacter::OnAmmoChange);
+
+	AMyProjectGameMode* GameMode = static_cast<AMyProjectGameMode*>(GetWorld()->GetAuthGameMode());
+	PickedWeapon->OnAmmoChange.AddUniqueDynamic(GameMode->BulletCounterComp, &UBulletCounter::Update);
 }
 
 bool AMyProjectCharacter::GetHasRifle()

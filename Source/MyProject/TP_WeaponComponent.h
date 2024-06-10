@@ -8,7 +8,7 @@
 
 class AMyProjectCharacter;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAmmoChange, int, AmmoCounter);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChange, int, CurrentBulletCount, int, MaxBulletCount);
 
 
 

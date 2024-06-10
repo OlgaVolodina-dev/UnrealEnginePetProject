@@ -86,6 +86,7 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	SetBulletCount(GetBulletCount() - 1);
+	OnAmmoChange.Broadcast(GetBulletCount(), 30);
 }
 
 void UTP_WeaponComponent::AttachWeapon(AMyProjectCharacter* TargetCharacter)

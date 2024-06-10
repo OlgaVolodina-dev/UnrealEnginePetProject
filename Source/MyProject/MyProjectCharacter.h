@@ -73,10 +73,6 @@ public:
 	class UTP_WeaponComponent* GetPickedWeapon() { return PickedWeapon; };
 
 
-	/** Attaches the actor to a FirstPersonCharacter */
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void OnAmmoChange(int bulletCount);
-
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

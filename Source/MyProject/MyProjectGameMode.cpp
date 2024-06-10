@@ -5,6 +5,8 @@
 #include "BulletCounter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/WidgetComponent.h"
+#include "TP_WeaponComponent.h"
+
 
 void AMyProjectGameMode::BeginPlay()
 {
@@ -13,8 +15,13 @@ void AMyProjectGameMode::BeginPlay()
 	if (PlayerHUDClass != nullptr)
 	{
 		BulletCounterComp = CreateWidget<UBulletCounter>(GetWorld(), PlayerHUDClass);
+		//BulletCounterComp->Update();
 		BulletCounterComp->AddToViewport();
+		
+		
 	}
+
+
 
 }
 
