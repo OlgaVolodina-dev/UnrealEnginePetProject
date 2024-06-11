@@ -24,6 +24,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UBulletCounter* BulletCounterComp;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> PauseMenuClass;
+
+	UPROPERTY(EditAnywhere)
+	class UPauseMenu* PauseMenuWidget;
 };
 
 

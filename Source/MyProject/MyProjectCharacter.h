@@ -41,6 +41,9 @@ class AMyProjectCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* PauseMenuAction;
+
 	
 public:
 	AMyProjectCharacter();
@@ -79,6 +82,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	/** Called for looking input */
+	void OpenPauseMenu(const FInputActionValue& Value);
 
 protected:
 	// APawn interface

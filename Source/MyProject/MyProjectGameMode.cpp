@@ -6,6 +6,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/WidgetComponent.h"
 #include "TP_WeaponComponent.h"
+#include "PauseMenu.h"
 
 
 void AMyProjectGameMode::BeginPlay()
@@ -17,12 +18,13 @@ void AMyProjectGameMode::BeginPlay()
 		BulletCounterComp = CreateWidget<UBulletCounter>(GetWorld(), PlayerHUDClass);
 		//BulletCounterComp->Update();
 		BulletCounterComp->AddToViewport();
-		
-		
 	}
 
 
-
+	if (PauseMenuClass != nullptr)
+	{
+		PauseMenuWidget = CreateWidget<UPauseMenu>(GetWorld(), PauseMenuClass);
+	}
 }
 
 AMyProjectGameMode::AMyProjectGameMode()

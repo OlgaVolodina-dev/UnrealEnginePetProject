@@ -14,6 +14,7 @@
 #include "BulletCounter.h"
 #include "TP_WeaponComponent.h"
 #include "MyProjectGameMode.h"
+#include "PauseMenu.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -85,6 +86,7 @@ void AMyProjectCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMyProjectCharacter::Look);
+		EnhancedInputComponent->BindAction(PauseMenuAction, ETriggerEvent::Started, this, &AMyProjectCharacter::OpenPauseMenu);
 	}
 	else
 	{
@@ -116,6 +118,25 @@ void AMyProjectCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AMyProjectCharacter::OpenPauseMenu(const FInputActionValue& Value)
+{
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+
+		//if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
+		//{
+		//	// Fire
+		//	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Fire);
+		//}
+
+		AMyProjectGameMode* GameMode = static_cast<AMyProjectGameMode*>(GetWorld()->GetAuthGameMode());
+		if (GameMode && GameMode->PauseMenuWidget)
+		{
+			GameMode->PauseMenuWidget->OpenMenu(PlayerController);
+		}
 	}
 }
 
