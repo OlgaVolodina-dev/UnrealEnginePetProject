@@ -4,18 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "DamageComponent.generated.h"
+#include "HealthComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MYPROJECT_API UDamageComponent : public UActorComponent
+class MYPROJECT_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UDamageComponent();
+	UHealthComponent();
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void Initialize(int maxhealth, AActor* actor);
 
+	UFUNCTION()
+	void ChangeHealth(int diff);
+
+private:
+	// todo weak ptr to hodler
+	TWeakObjectPtr<AActor> Owner;
+	int CurrentHealth;
+	int MaxHealth;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

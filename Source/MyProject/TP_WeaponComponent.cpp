@@ -13,6 +13,8 @@
 
 void UTP_WeaponComponent::BeginPlay()
 {
+
+	Super::BeginPlay();
 	if (Character == nullptr)
 	{
 		return;

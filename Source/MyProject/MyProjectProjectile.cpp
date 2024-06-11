@@ -3,6 +3,7 @@
 #include "MyProjectProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "HealthComponent.h"
 
 AMyProjectProjectile::AMyProjectProjectile() 
 {
@@ -38,6 +39,10 @@ void AMyProjectProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	{
 		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
 
+		if (auto health = OtherActor->FindComponentByClass<UHealthComponent>())
+		{
+			health->ChangeHealth(-50);
+		}
 		Destroy();
 	}
 }
