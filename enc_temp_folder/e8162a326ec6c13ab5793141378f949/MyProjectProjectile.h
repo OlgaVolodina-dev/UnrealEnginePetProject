@@ -36,7 +36,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	float InitialSpeed;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TEnumAsByte < ProjectileTypes> ProjectileType;
 	/** called when projectile hits something */

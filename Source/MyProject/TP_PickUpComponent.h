@@ -11,6 +11,14 @@
 // The character picking this up is the parameter sent with the notification
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AMyProjectCharacter*, PickUpCharacter);
 
+UENUM(BlueprintType)
+enum PickUpTypes
+{
+	None,
+	Weapon,
+	Grenade
+};
+
 UCLASS(Blueprintable, BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class MYPROJECT_API UTP_PickUpComponent : public USphereComponent
 {
@@ -18,6 +26,12 @@ class MYPROJECT_API UTP_PickUpComponent : public USphereComponent
 
 public:
 	
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TEnumAsByte < PickUpTypes> PickUpType;
+
+
 	/** Delegate to whom anyone can subscribe to receive this event */
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnPickUp OnPickUp;

@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TP_PickUpComponent.h"
+#include "ThrowableComponent.h"
 
 UTP_PickUpComponent::UTP_PickUpComponent()
 {
@@ -27,5 +28,11 @@ void UTP_PickUpComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 
 		// Unregister from the Overlap Event so it is no longer triggered
 		OnComponentBeginOverlap.RemoveAll(this);
+
+		if (PickUpType == PickUpTypes::Grenade)
+		{
+			Character->ToogleGrenadesNumber(1);
+			GetOwner()->Destroy();
+		}
 	}
 }

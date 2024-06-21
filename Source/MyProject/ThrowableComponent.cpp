@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SphereComponent.h"
 
 
 
@@ -48,7 +49,7 @@ void UThrowableComponent::AttachThrowable(AMyProjectCharacter* TargetCharacter)
 		{
 			// Fire
 			EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Completed, this, &UThrowableComponent::Throw);
-			EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &UThrowableComponent::PredictGrenadePath);
+			EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &UThrowableComponent::PredictGrenadePath);
 		}
 	}
 }
@@ -56,6 +57,10 @@ void UThrowableComponent::AttachThrowable(AMyProjectCharacter* TargetCharacter)
 
 void UThrowableComponent::Throw()
 {
+	if (Character == nullptr)
+	{
+		return;
+	}
 	//if (Character || Character->GetGrenadesNumber() == 0)
 	//{
 	//	return;
@@ -86,6 +91,11 @@ void UThrowableComponent::Throw()
 
 void UThrowableComponent::PredictGrenadePath()
 {
+	if (Character == nullptr)
+	{
+		return;
+	}
+	auto tempProjectile = NewObject<AMyProjectProjectile>(ProjectileClass);
 	UWorld* const World = GetWorld();
 	if (World != nullptr)
 	{
@@ -95,13 +105,13 @@ void UThrowableComponent::PredictGrenadePath()
 		
 		FPredictProjectilePathParams params;
 		FPredictProjectilePathResult res;
-		
-		params.ProjectileRadius = 10.0f;
+
+		params.ProjectileRadius = tempProjectile->GetCollisionComp()->GetScaledSphereRadius();
 		params.StartLocation = SpawnLocation;
-		params.LaunchVelocity = SpawnRotation.RotateVector(FVector(400.0f, 0.0f, 0.0f));
+		params.LaunchVelocity = tempProjectile->InitialSpeed * SpawnRotation.RotateVector(FVector(1.0f, 0.0f, 0.0f));
 		params.MaxSimTime = 1.0f;
 
-		params.DrawDebugType = EDrawDebugTrace::Persistent;
+		params.DrawDebugType = EDrawDebugTrace::ForOneFrame;
 		
 		UGameplayStatics::Blueprint_PredictProjectilePath_Advanced(World, params, res);
 	}

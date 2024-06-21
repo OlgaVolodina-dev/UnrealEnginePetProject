@@ -44,6 +44,9 @@ class AMyProjectCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* PauseMenuAction;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	class UThrowableComponent* ThrowableComponent;
+
 	
 public:
 	AMyProjectCharacter();

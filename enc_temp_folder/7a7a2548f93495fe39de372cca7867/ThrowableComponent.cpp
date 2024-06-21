@@ -25,6 +25,7 @@ UThrowableComponent::UThrowableComponent()
 void UThrowableComponent::AttachThrowable(AMyProjectCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
+	
 
 	if (Character == nullptr)
 	{
@@ -55,10 +56,14 @@ void UThrowableComponent::AttachThrowable(AMyProjectCharacter* TargetCharacter)
 
 void UThrowableComponent::Throw()
 {
-	if (Character || Character->GetGrenadesNumber() == 0)
+	if (Character == nullptr)
 	{
 		return;
 	}
+	//if (Character || Character->GetGrenadesNumber() == 0)
+	//{
+	//	return;
+	//}
 
 	if (ProjectileClass != nullptr)
 	{
@@ -85,16 +90,29 @@ void UThrowableComponent::Throw()
 
 void UThrowableComponent::PredictGrenadePath()
 {
+	if (Character == nullptr)
+	{
+		return;
+	}
+	auto tempProjectile = NewObject<AMyProjectProjectile>(ProjectileClass);
 	UWorld* const World = GetWorld();
 	if (World != nullptr)
 	{
 		APlayerController* PlayerController = Cast<APlayerController>(Character->GetController());
 		FRotator SpawnRotation = PlayerController->PlayerCameraManager->GetCameraRotation();
 		FVector SpawnLocation = Character->GetActorLocation() + SpawnRotation.RotateVector(MuzzleOffset);
-		auto str = FPredictProjectilePathParams(10.0f, SpawnLocation, SpawnRotation.RotateVector(FVector(400.0f, 0.0f, 0.0f)), 1.0f);
-		str.DrawDebugType = EDrawDebugTrace::Persistent;
+		
+		FPredictProjectilePathParams params;
 		FPredictProjectilePathResult res;
-		UGameplayStatics::Blueprint_PredictProjectilePath_Advanced(World, str, res);
+		
+		params.ProjectileRadius = 10.0f;
+		params.StartLocation = SpawnLocation;
+		params.LaunchVelocity =  SpawnRotation.RotateVector(FVector(400.0f, 0.0f, 0.0f));
+		params.MaxSimTime = 1.0f;
+
+		params.DrawDebugType = EDrawDebugTrace::Persistent;
+		
+		UGameplayStatics::Blueprint_PredictProjectilePath_Advanced(World, params, res);
 	}
 }
 

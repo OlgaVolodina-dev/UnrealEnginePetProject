@@ -16,6 +16,7 @@
 #include "MyProjectGameMode.h"
 #include "PauseMenu.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ThrowableComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +53,8 @@ AMyProjectCharacter::AMyProjectCharacter()
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
+	ThrowableComponent = CreateDefaultSubobject<UThrowableComponent>(TEXT("ThrowableComponent"));
+	AddOwnedComponent(ThrowableComponent);
 }
 
 
@@ -164,6 +167,10 @@ int AMyProjectCharacter::GetGrenadesNumber()
 void AMyProjectCharacter::SetGrenadesNumber(int num)
 {
 	GrenadesNumber = FMath::Max(num, 0);
+	if (GrenadesNumber != 0)
+	{
+		ThrowableComponent->AttachThrowable(this);
+	}
 }
 
 void AMyProjectCharacter::ToogleGrenadesNumber(int diff)
