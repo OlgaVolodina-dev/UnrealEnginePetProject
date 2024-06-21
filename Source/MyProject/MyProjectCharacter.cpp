@@ -15,6 +15,7 @@
 #include "TP_WeaponComponent.h"
 #include "MyProjectGameMode.h"
 #include "PauseMenu.h"
+#include "Kismet/KismetMathLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -37,6 +38,7 @@ AMyProjectCharacter::AMyProjectCharacter()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->SetRelativeLocation(FVector(-10.f, 0.f, 60.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+	GrenadesNumber = 0;
 	
 	
 
@@ -152,4 +154,20 @@ void AMyProjectCharacter::SetHasRifle(bool bNewHasRifle, UTP_WeaponComponent* we
 bool AMyProjectCharacter::GetHasRifle()
 {
 	return bHasRifle;
+}
+
+int AMyProjectCharacter::GetGrenadesNumber()
+{
+	return GrenadesNumber;
+}
+
+void AMyProjectCharacter::SetGrenadesNumber(int num)
+{
+	GrenadesNumber = FMath::Max(num, 0);
+}
+
+void AMyProjectCharacter::ToogleGrenadesNumber(int diff)
+{
+	SetGrenadesNumber(GrenadesNumber + diff);
+
 }

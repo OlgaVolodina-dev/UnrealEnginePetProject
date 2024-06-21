@@ -75,6 +75,18 @@ public:
 	UFUNCTION()
 	class UTP_WeaponComponent* GetPickedWeapon() { return PickedWeapon; };
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
+	int GrenadesNumber;
+
+	UFUNCTION()
+	int GetGrenadesNumber();
+
+	UFUNCTION()
+	void SetGrenadesNumber(int num);
+
+	UFUNCTION()
+	void ToogleGrenadesNumber(int diff);
+
 
 protected:
 	/** Called for movement input */
